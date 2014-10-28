@@ -1,0 +1,25 @@
+This is the UCR UAS ground station server / client.
+
+At this point in time (27 October 2014), the groundstation is more or less
+planned out in features to implement.  Although the actual features are under
+discussion.
+
+Here is a list of features by expected order of implementation:
+	Primary:
+		Download Intelligence				On Hold (programming in progress)
+		Go / No Go							Interface Mostly Done, some rev-
+											ision needed for elegant resizing
+		Final Images						Specifications Underway.
+		Manual Image Processing				Specifications Underway.
+		SRIC Interface						Specifications Underway.
+		SDA Interface						Specifications Underway.
+
+	Secondary:
+		User Stats							Specifications Underway.
+		System Stats						Specifications Underway.
+		Camera Stats						Specifications Underway.
+		Power Stats							Specifications Underway.
+		Network Stats						Specifications Underway.
+
+
+

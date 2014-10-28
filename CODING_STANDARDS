@@ -1,0 +1,41 @@
+Header:
+	The file shall have a header including a breif description of the file;
+		Everything else is more or less stored in git.  And blame shall be
+		applied thusly.
+
+Function Statements and Braces:
+	At the beginning of each function statement, the brace for the function
+		shall appear at the line proceeding the function statement.
+
+Other Statements and Braces:
+	At the beginning of each if, while, for, etc. there shall be a brace
+		after the statement.
+
+		example:
+
+		for (int i = 0; i < 10; i++) {
+			std::cout << "I can count: " << i << std::endl;
+		}
+
+	It should be noted that "else" can have surrounding braces.
+
+		example:
+		
+		if (debug_level => 1) {
+			std::cout << "Changed Variable: " << changed << std::endl;
+		} else {
+			std::cout << "Variable changed" << std::endl;
+		}
+
+Pointers:
+	Dereference and reference are always right-aligned.
+
+		example:
+
+		int *i = &temporary;
+
+Indentation and Tabs:
+	Tabs are done through four (4) spaces.
+
+	Most of the indentation is actually handled by QtCreator very well.
+		So no concerns if your indentation does not match completely.

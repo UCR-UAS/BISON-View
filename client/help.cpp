@@ -12,3 +12,8 @@ help::~help()
 {
     delete ui;
 }
+
+void help::on_pushButton_clicked()
+{
+    done(0);
+}

@@ -23,6 +23,7 @@ class welcome_message : public QWidget
 public:
     explicit welcome_message(QWidget *parent = 0);
     ~welcome_message();
+    void new_message(const QString &message);
 
 private:
     Ui::welcome_message *ui;

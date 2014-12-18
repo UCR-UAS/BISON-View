@@ -24,3 +24,8 @@ welcome_message::~welcome_message()
 {
     delete ui;
 }
+
+void welcome_message::new_message(const QString &message)
+{
+    ui->textBrowser->insertPlainText(message);
+}

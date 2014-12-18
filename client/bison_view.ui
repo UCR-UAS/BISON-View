@@ -45,7 +45,7 @@
           <string notr="true">color: red;</string>
          </property>
          <property name="text">
-          <string>No Link</string>
+          <string>Login</string>
          </property>
         </widget>
        </item>
@@ -110,8 +110,16 @@
     </property>
     <addaction name="actionSet_Server"/>
    </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="actionBISON_View_Help"/>
+    <addaction name="actionWhat_s_this"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuConnection"/>
+   <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionSave_Telemetry">
@@ -142,6 +150,16 @@
   <action name="actionSet_Server">
    <property name="text">
     <string>S&amp;et Server</string>
+   </property>
+  </action>
+  <action name="actionBISON_View_Help">
+   <property name="text">
+    <string>BISON-View Help</string>
+   </property>
+  </action>
+  <action name="actionWhat_s_this">
+   <property name="text">
+    <string>What's this?</string>
    </property>
   </action>
  </widget>

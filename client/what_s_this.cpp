@@ -6,9 +6,15 @@ what_s_this::what_s_this(QWidget *parent) :
     ui(new Ui::what_s_this)
 {
     ui->setupUi(this);
+
 }
 
 what_s_this::~what_s_this()
 {
     delete ui;
+}
+
+void what_s_this::on_pushButton_clicked()
+{
+    done(0);
 }

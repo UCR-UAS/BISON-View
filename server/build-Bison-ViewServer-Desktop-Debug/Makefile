@@ -47,11 +47,13 @@ OBJECTS_DIR   = ./
 
 SOURCES       = ../Bison-ViewServer/main.cpp \
 		../Bison-ViewServer/server.cpp \
-		../Bison-ViewServer/thread.cpp moc_server.cpp \
+		../Bison-ViewServer/thread.cpp \
+		../Bison-ViewServer/user.cpp moc_server.cpp \
 		moc_thread.cpp
 OBJECTS       = main.o \
 		server.o \
 		thread.o \
+		user.o \
 		moc_server.o \
 		moc_thread.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
@@ -307,7 +309,7 @@ qmake_all: FORCE
 
 dist: 
 	@test -d .tmp/Bison-ViewServer1.0.0 || mkdir -p .tmp/Bison-ViewServer1.0.0
-	$(COPY_FILE) --parents $(SOURCES) $(DIST) .tmp/Bison-ViewServer1.0.0/ && $(COPY_FILE) --parents ../Bison-ViewServer/server.h ../Bison-ViewServer/thread.h .tmp/Bison-ViewServer1.0.0/ && $(COPY_FILE) --parents ../Bison-ViewServer/main.cpp ../Bison-ViewServer/server.cpp ../Bison-ViewServer/thread.cpp .tmp/Bison-ViewServer1.0.0/ && (cd `dirname .tmp/Bison-ViewServer1.0.0` && $(TAR) Bison-ViewServer1.0.0.tar Bison-ViewServer1.0.0 && $(COMPRESS) Bison-ViewServer1.0.0.tar) && $(MOVE) `dirname .tmp/Bison-ViewServer1.0.0`/Bison-ViewServer1.0.0.tar.gz . && $(DEL_FILE) -r .tmp/Bison-ViewServer1.0.0
+	$(COPY_FILE) --parents $(SOURCES) $(DIST) .tmp/Bison-ViewServer1.0.0/ && $(COPY_FILE) --parents ../Bison-ViewServer/server.h ../Bison-ViewServer/thread.h ../Bison-ViewServer/user.h .tmp/Bison-ViewServer1.0.0/ && $(COPY_FILE) --parents ../Bison-ViewServer/main.cpp ../Bison-ViewServer/server.cpp ../Bison-ViewServer/thread.cpp ../Bison-ViewServer/user.cpp .tmp/Bison-ViewServer1.0.0/ && (cd `dirname .tmp/Bison-ViewServer1.0.0` && $(TAR) Bison-ViewServer1.0.0.tar Bison-ViewServer1.0.0 && $(COMPRESS) Bison-ViewServer1.0.0.tar) && $(MOVE) `dirname .tmp/Bison-ViewServer1.0.0`/Bison-ViewServer1.0.0.tar.gz . && $(DEL_FILE) -r .tmp/Bison-ViewServer1.0.0
 
 
 clean:compiler_clean 
@@ -414,6 +416,14 @@ moc_server.cpp: /usr/include/qt5/QtCore/QObject \
 		/usr/include/qt5/QtNetwork/qhostaddress.h \
 		/usr/include/qt5/QtNetwork/QTcpSocket \
 		/usr/include/qt5/QtNetwork/qtcpsocket.h \
+		/usr/include/qt5/QtCore/QFile \
+		/usr/include/qt5/QtCore/qfile.h \
+		/usr/include/qt5/QtCore/qfiledevice.h \
+		/usr/include/qt5/QtCore/QTextStream \
+		../Bison-ViewServer/thread.h \
+		/usr/include/qt5/QtCore/QThread \
+		/usr/include/qt5/QtCore/qthread.h \
+		../Bison-ViewServer/user.h \
 		../Bison-ViewServer/server.h
 	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) $(INCPATH) -I/usr/include/c++/4.8 -I/usr/include/x86_64-linux-gnu/c++/4.8 -I/usr/include/c++/4.8/backward -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../Bison-ViewServer/server.h -o moc_server.cpp
 
@@ -499,6 +509,8 @@ moc_thread.cpp: /usr/include/qt5/QtCore/QThread \
 		/usr/include/qt5/QtNetwork/qhostaddress.h \
 		/usr/include/qt5/QtNetwork/QTcpSocket \
 		/usr/include/qt5/QtNetwork/qtcpsocket.h \
+		../Bison-ViewServer/user.h \
+		/usr/include/qt5/QtCore/QObject \
 		../Bison-ViewServer/thread.h
 	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) $(INCPATH) -I/usr/include/c++/4.8 -I/usr/include/x86_64-linux-gnu/c++/4.8 -I/usr/include/c++/4.8/backward -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../Bison-ViewServer/thread.h -o moc_thread.cpp
 
@@ -598,7 +610,15 @@ main.o: ../Bison-ViewServer/main.cpp /usr/include/qt5/QtCore/QCoreApplication \
 		/usr/include/qt5/QtNetwork/qabstractsocket.h \
 		/usr/include/qt5/QtNetwork/qhostaddress.h \
 		/usr/include/qt5/QtNetwork/QTcpSocket \
-		/usr/include/qt5/QtNetwork/qtcpsocket.h
+		/usr/include/qt5/QtNetwork/qtcpsocket.h \
+		/usr/include/qt5/QtCore/QFile \
+		/usr/include/qt5/QtCore/qfile.h \
+		/usr/include/qt5/QtCore/qfiledevice.h \
+		/usr/include/qt5/QtCore/QTextStream \
+		../Bison-ViewServer/thread.h \
+		/usr/include/qt5/QtCore/QThread \
+		/usr/include/qt5/QtCore/qthread.h \
+		../Bison-ViewServer/user.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../Bison-ViewServer/main.cpp
 
 server.o: ../Bison-ViewServer/server.cpp ../Bison-ViewServer/server.h \
@@ -683,9 +703,14 @@ server.o: ../Bison-ViewServer/server.cpp ../Bison-ViewServer/server.h \
 		/usr/include/qt5/QtNetwork/qhostaddress.h \
 		/usr/include/qt5/QtNetwork/QTcpSocket \
 		/usr/include/qt5/QtNetwork/qtcpsocket.h \
+		/usr/include/qt5/QtCore/QFile \
+		/usr/include/qt5/QtCore/qfile.h \
+		/usr/include/qt5/QtCore/qfiledevice.h \
+		/usr/include/qt5/QtCore/QTextStream \
 		../Bison-ViewServer/thread.h \
 		/usr/include/qt5/QtCore/QThread \
-		/usr/include/qt5/QtCore/qthread.h
+		/usr/include/qt5/QtCore/qthread.h \
+		../Bison-ViewServer/user.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o server.o ../Bison-ViewServer/server.cpp
 
 thread.o: ../Bison-ViewServer/thread.cpp ../Bison-ViewServer/thread.h \
@@ -770,8 +795,70 @@ thread.o: ../Bison-ViewServer/thread.cpp ../Bison-ViewServer/thread.h \
 		/usr/include/qt5/QtNetwork/qabstractsocket.h \
 		/usr/include/qt5/QtNetwork/qhostaddress.h \
 		/usr/include/qt5/QtNetwork/QTcpSocket \
-		/usr/include/qt5/QtNetwork/qtcpsocket.h
+		/usr/include/qt5/QtNetwork/qtcpsocket.h \
+		../Bison-ViewServer/user.h \
+		/usr/include/qt5/QtCore/QObject
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o thread.o ../Bison-ViewServer/thread.cpp
+
+user.o: ../Bison-ViewServer/user.cpp ../Bison-ViewServer/user.h \
+		/usr/include/qt5/QtCore/QObject \
+		/usr/include/qt5/QtCore/qobject.h \
+		/usr/include/qt5/QtCore/qobjectdefs.h \
+		/usr/include/qt5/QtCore/qnamespace.h \
+		/usr/include/qt5/QtCore/qglobal.h \
+		/usr/include/qt5/QtCore/qconfig.h \
+		/usr/include/qt5/QtCore/qfeatures.h \
+		/usr/include/qt5/QtCore/qsystemdetection.h \
+		/usr/include/qt5/QtCore/qprocessordetection.h \
+		/usr/include/qt5/QtCore/qcompilerdetection.h \
+		/usr/include/qt5/QtCore/qglobalstatic.h \
+		/usr/include/qt5/QtCore/qatomic.h \
+		/usr/include/qt5/QtCore/qbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_bootstrap.h \
+		/usr/include/qt5/QtCore/qgenericatomic.h \
+		/usr/include/qt5/QtCore/qatomic_msvc.h \
+		/usr/include/qt5/QtCore/qatomic_integrity.h \
+		/usr/include/qt5/QtCore/qoldbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_vxworks.h \
+		/usr/include/qt5/QtCore/qatomic_power.h \
+		/usr/include/qt5/QtCore/qatomic_alpha.h \
+		/usr/include/qt5/QtCore/qatomic_armv7.h \
+		/usr/include/qt5/QtCore/qatomic_armv6.h \
+		/usr/include/qt5/QtCore/qatomic_armv5.h \
+		/usr/include/qt5/QtCore/qatomic_bfin.h \
+		/usr/include/qt5/QtCore/qatomic_ia64.h \
+		/usr/include/qt5/QtCore/qatomic_mips.h \
+		/usr/include/qt5/QtCore/qatomic_s390.h \
+		/usr/include/qt5/QtCore/qatomic_sh4a.h \
+		/usr/include/qt5/QtCore/qatomic_sparc.h \
+		/usr/include/qt5/QtCore/qatomic_gcc.h \
+		/usr/include/qt5/QtCore/qatomic_x86.h \
+		/usr/include/qt5/QtCore/qatomic_cxx11.h \
+		/usr/include/qt5/QtCore/qatomic_unix.h \
+		/usr/include/qt5/QtCore/qmutex.h \
+		/usr/include/qt5/QtCore/qlogging.h \
+		/usr/include/qt5/QtCore/qflags.h \
+		/usr/include/qt5/QtCore/qtypeinfo.h \
+		/usr/include/qt5/QtCore/qtypetraits.h \
+		/usr/include/qt5/QtCore/qsysinfo.h \
+		/usr/include/qt5/QtCore/qobjectdefs_impl.h \
+		/usr/include/qt5/QtCore/qstring.h \
+		/usr/include/qt5/QtCore/qchar.h \
+		/usr/include/qt5/QtCore/qbytearray.h \
+		/usr/include/qt5/QtCore/qrefcount.h \
+		/usr/include/qt5/QtCore/qarraydata.h \
+		/usr/include/qt5/QtCore/qstringbuilder.h \
+		/usr/include/qt5/QtCore/qlist.h \
+		/usr/include/qt5/QtCore/qalgorithms.h \
+		/usr/include/qt5/QtCore/qiterator.h \
+		/usr/include/qt5/QtCore/qcoreevent.h \
+		/usr/include/qt5/QtCore/qscopedpointer.h \
+		/usr/include/qt5/QtCore/qmetatype.h \
+		/usr/include/qt5/QtCore/qvarlengtharray.h \
+		/usr/include/qt5/QtCore/qcontainerfwd.h \
+		/usr/include/qt5/QtCore/qisenum.h \
+		/usr/include/qt5/QtCore/qobject_impl.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o user.o ../Bison-ViewServer/user.cpp
 
 moc_server.o: moc_server.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_server.o moc_server.cpp

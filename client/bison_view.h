@@ -42,6 +42,7 @@ private:
     QTcpSocket *tcp_sock;
     void update_login();
     void update_role();
+    void update_go();
 
 private slots:
     void go_press();

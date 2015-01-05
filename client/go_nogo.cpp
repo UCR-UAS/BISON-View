@@ -19,16 +19,8 @@ Go_NoGo::Go_NoGo(QWidget *parent) :
 
     // user listing test
     for (int i = 0; i < 5; i++) {
-        QListWidgetItem* brandon = new QListWidgetItem("Brandon");
-        brandon->setForeground(Qt::red);
-        brandon->setBackground(Qt::green);
-        list[0]->addItem(brandon);
+
     }
-    list[1]->addItem("Brandon");
-    list[2]->addItem("Brandon");
-    list[3]->addItem("Brandon");
-    list[4]->addItem("Brandon");
-    list[5]->addItem("Brandon");
 
 }
 

@@ -5,7 +5,11 @@
 #include <QDebug>
 #include <QTcpServer>
 #include <QTcpSocket>
+#include <vector>
+#include <QFile>
+#include <QTextStream>
 #include "thread.h"
+#include "user.h"
 
 class Server : public QTcpServer
 {
@@ -17,10 +21,12 @@ public:
 signals:
 
 public slots:
-
+   int login(QString uname, QString pass);
+   void logout(int user_index);
+   void go_change(int user_index, bool status);
 private:
-   QString usernames[2];
-   QString passwords[2];
+   std::vector<User> user_list;
+   void load_users();
 protected:
     void incomingConnection(qintptr socketDescriptor);
 };

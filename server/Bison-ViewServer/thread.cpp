@@ -5,6 +5,7 @@ Thread::Thread(int ID, QObject *parent) :
 {
     this->socketDescriptor = ID;
     logged_in = false;
+    curr_user = -1;
 }
 
 void Thread::run()
@@ -28,15 +29,29 @@ void Thread::run()
     exec();
 }
 
-char Thread::login(QString credentials){
+void Thread::login(QString credentials){
     int space = credentials.indexOf(" ", 3);
     int newline = credentials.indexOf("\n");
-    QStringRef name = credentials.midRef(3,(space - 3));
-    QStringRef pass = credentials.midRef((space + 1),(newline - space));
-    qDebug() << "Name: " << name << " Pass: " << pass;
-    qDebug() << "Login Valid";
-    logged_in = true;
-    return('1');
+    QString uname = credentials.mid(3,(space - 3));
+    QString pass = credentials.mid((space + 1),(newline - space));
+    curr_user = emit login_main(uname, pass);
+    if(curr_user > -1){
+        logged_in = true;
+        QString message = "%L 1";
+        QByteArray data;
+        data.append(message);
+        socket->write(data);
+        socket->flush();
+        socket->waitForBytesWritten(3000);
+        emit
+    }else{
+        QString message = "%L 0";
+        QByteArray data;
+        data.append(message);
+        socket->write(data);
+        socket->flush();
+        socket->waitForBytesWritten(3000);
+    }
 }
 
 
@@ -46,24 +61,39 @@ void Thread::readyRead()
 
     qDebug() << "<" << this->socketDescriptor << "> Data in:" << data;
 
-    if(data.mid(0,2) == "%L"){
+    if(data.mid(0,3) == "%L "){
         QString credentials = data;
-        char response = login(data);
-        data.clear();
-        data.append("%L " + response);
-        socket->write(data);
-        socket->flush();
-        socket->waitForBytesWritten(3000);
-    }else if(data.mid(0,2) == "%E"){
-        disconnected();
+        login(data);
     }else if(data.mid(0,3) == "%LO"){
-        data.clear();
-        data.append("%L 0");
+        emit logout_main(curr_user);
         logged_in = false;
-        qDebug() << "Logged out";
+        curr_user = -1;
+        QString  message = "%L 0";
+        QByteArray data;
+        data.append(message);
         socket->write(data);
         socket->flush();
-        socket->waitForBytesWritten(3000);
+        socket->waitForBytesWritten();
+    }else if(data.mid(0,3) == "%E"){
+        disconnected();
+    }else if(data.mid(0,3) == "%G "){
+        if(logged_in){
+            QString message;
+            if(data.mid(3) == "1"){
+                emit go_status_update(curr_user, true);
+                message = "%G 1";
+                qDebug() << message;
+            }else if(data.mid(3) == "0"){
+                emit go_status_update(curr_user, false);
+                message = "%G 0";
+                qDebug() << message;
+            }
+            data.clear();
+            data.append(message);
+            socket->write(data);
+            socket->flush();
+            socket->waitForBytesWritten(3000);
+         }
     }else{
         socket->write(data);
         socket->flush();
@@ -75,6 +105,9 @@ void Thread::readyRead()
 
 void Thread::disconnected()
 {
+    if(logged_in){
+        emit logout_main(curr_user);
+    }
     qDebug() << "<" << this->socketDescriptor << "> Client disconnected.";
     socket->deleteLater();
     exit(0);

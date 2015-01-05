@@ -29,6 +29,18 @@ BISON_View::BISON_View(QWidget *parent) :
     // run premade UI setup
     ui->setupUi(this);
 
+    // initialize sockets
+    tcp_sock = new QTcpSocket(this);
+    QHostAddress server;
+    server.setAddress("127.0.0.1");
+    tcp_sock->connectToHost(server, 1234);
+    if(tcp_sock->isOpen()){
+        qDebug() << "Socket connected.";
+    }else{
+        qDebug() << "Socket could not connect.";
+    }
+    connect(tcp_sock, SIGNAL(readyRead()), this, SLOT(process_pending_tcp()));
+
     //show menu bar
     ui->menuBar->show();
 
@@ -47,8 +59,7 @@ BISON_View::BISON_View(QWidget *parent) :
     autopilot_tab->hide();
 
     // initialize go/no go
-    go_status = true;
-    go_press();
+    go_status = false;
     ui->pushButton->setStyleSheet("color: grey;");
     ui->pushButton->setText("No &Go!");
     ui->pushButton->setEnabled(false);
@@ -79,17 +90,6 @@ BISON_View::BISON_View(QWidget *parent) :
     // initialize signals
     connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(go_press()));
 
-    // initialize sockets
-    tcp_sock = new QTcpSocket(this);
-    QHostAddress server;
-    server.setAddress("127.0.0.1");
-    tcp_sock->connectToHost(server, 1234);
-    if(tcp_sock->isOpen()){
-        qDebug() << "Socket connected.";
-    }else{
-        qDebug() << "Socket could not connect.";
-    }
-    connect(tcp_sock, SIGNAL(readyRead()), this, SLOT(process_pending_tcp()));
 }
 
 BISON_View::~BISON_View()
@@ -107,15 +107,28 @@ BISON_View::~BISON_View()
 
 void BISON_View::go_press()
 {
-
-   if (go_status) {
-       ui->pushButton->setStyleSheet("color: red;");
-       ui->pushButton->setText("No &Go!");
-   } else {
-       ui->pushButton->setStyleSheet("color: darkgreen;");
-       ui->pushButton->setText("&Go!");
+   QString message;
+   QByteArray data;
+   if(go_status){
+     message = "%G 0";
+   }else{
+     message = "%G 1";
    }
-   go_status = !go_status;
+   data.append(message);
+   tcp_sock->write(data);
+   tcp_sock->flush();
+   tcp_sock->waitForBytesWritten(3000);
+}
+
+void BISON_View::update_go()
+{
+    if (go_status) {
+        ui->pushButton->setStyleSheet("color: darkgreen");
+        ui->pushButton->setText("&Go!");
+    } else {
+        ui->pushButton->setStyleSheet("color: red;");
+        ui->pushButton->setText("No &Go!");
+    }
 }
 
 void BISON_View::on_actionWhat_s_this_triggered()
@@ -235,14 +248,22 @@ void BISON_View::broadcast_tcp()
 void BISON_View::process_pending_tcp()
 {
     QByteArray data = tcp_sock->readAll();
-    if(data.mid(0,2) == "%L"){
-        qDebug() << data;
+    qDebug() << data;
+    if(data.mid(0,3) == "%L "){
         if(data.mid(3) == "1"){
             logged_in = true;
         }else if(data.mid(3) == "0"){
             logged_in = false;
         }
         update_login();
+    }else if(data.mid(0,3) == "%G "){
+        if(data.mid(3) == "1"){
+            go_status = true;
+            update_go();
+        }else if(data.mid(3) == "0"){
+            go_status = false;
+            update_go();
+        }
     }
 }
 

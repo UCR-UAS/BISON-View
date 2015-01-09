@@ -27,6 +27,8 @@ public:
     explicit Go_NoGo(QWidget *parent = 0);
     ~Go_NoGo();
 
+public slots:
+    void user_update(QString);
 
 private:
     QGridLayout *grid;

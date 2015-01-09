@@ -52,6 +52,9 @@ private slots:
     void broadcast_tcp();
     void process_pending_tcp();
     void on_comboBox_currentIndexChanged(int index);
+
+signals:
+    void user_update(QString);
 };
 
 #endif // BISON_VIEW_H

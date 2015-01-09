@@ -15,11 +15,13 @@ public:
     void run();
     void login(QString credentials);
 signals:
-    int login_main(QString uname, QString pass);
+    void login_main(QString uname, QString pass, int sock_num);
     void logout_main(int user_index);
     void go_status_update(int user_index, bool status);
     void error(QTcpSocket::SocketError socket_error);
 public slots:
+    void login_listen(int sock, int index);
+    void server_message(QString message);
     void readyRead();
     void disconnected();
 private:

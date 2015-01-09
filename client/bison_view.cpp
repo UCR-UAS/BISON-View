@@ -47,6 +47,7 @@ BISON_View::BISON_View(QWidget *parent) :
     // initialize tabs
     message_tab = new welcome_message(this);
     go_nogo_tab = new Go_NoGo(this);
+    connect(this, SIGNAL(user_update(QString)), go_nogo_tab, SLOT(user_update(QString)));
     mission_commander_tab = new mission_commander(this);
     mission_commander_tab->hide();
     telemetry_tab = new telemetry(this);
@@ -250,7 +251,7 @@ void BISON_View::process_pending_tcp()
     QByteArray data = tcp_sock->readAll();
     qDebug() << data;
     if(data.mid(0,3) == "%L "){
-        if(data.mid(3) == "1"){
+        if(data.mid(3,1) == "1"){
             logged_in = true;
         }else if(data.mid(3) == "0"){
             logged_in = false;
@@ -264,6 +265,10 @@ void BISON_View::process_pending_tcp()
             go_status = false;
             update_go();
         }
+    }else if(data.mid(0,3) == "%U "){
+        QString user_info;
+        user_info.append(data);
+        emit user_update(user_info);
     }
 }
 

@@ -36,15 +36,24 @@ void Server::startServer()
     }
 }
 
-int Server::login(QString uname, QString pass){
+void Server::login(QString uname, QString pass, int sock_num){
     for(unsigned i=0;i<user_list.size();++i){
         if(user_list.at(i).login(uname, pass)){
             qDebug() << "Login Successful";
-            return(i);
+            emit login_response(sock_num, i);
+            QString message = "%U ";
+            message.append(user_list.at(i).get_username());
+            message.append(" /G");
+            message.append(user_list.at(i).get_go());
+            message.append("/R");
+            message.append(user_list.at(i).get_role());
+            qDebug() << message;
+            emit server_message(message);
+            return;
         }
     }
     qDebug() << "Login Failed";
-    return(-1);
+    emit login_response(sock_num, -1);
 }
 
 void Server::logout(int user_index){
@@ -60,9 +69,9 @@ void Server::incomingConnection(qintptr socketDescriptor)
     Thread *connection = new Thread(socketDescriptor, this);
     qDebug() << "<" << socketDescriptor << "> Connecting.....";
     connect(connection, SIGNAL(finished()), connection, SLOT(deleteLater()));
-    connect(connection, SIGNAL(login_main()), this, SLOT(login()));
-    connect(connection, SIGNAL(logout_main()), this, SLOT(logout()));
-    connect(connection, SIGNAL(go_status_update()), this, SLOT(go_change()));
+    connect(connection, SIGNAL(login_main(QString, QString, int)), this, SLOT(login(QString, QString, int)), Qt::QueuedConnection);
+    connect(connection, SIGNAL(logout_main(int)), this, SLOT(logout(int)),Qt::QueuedConnection);
+    connect(connection, SIGNAL(go_status_update(int, bool)), this, SLOT(go_change(int, bool)),Qt::QueuedConnection);
     connection->start();
 }
 

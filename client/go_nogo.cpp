@@ -17,11 +17,6 @@ Go_NoGo::Go_NoGo(QWidget *parent) :
         grid->addWidget(list[i], 1, i, 1, 1);
     }
 
-    // user listing test
-    for (int i = 0; i < 5; i++) {
-
-    }
-
 }
 
 Go_NoGo::~Go_NoGo()
@@ -31,4 +26,12 @@ Go_NoGo::~Go_NoGo()
         delete label[i];
     }
     delete grid;
+}
+
+void Go_NoGo::user_update(QString data){
+    int end_uname = data.indexOf(" /");
+    QString uname = data.mid(3,end_uname-3);
+    int gStat = data.mid(end_uname+3,1).toInt();
+    int role = data.mid(end_uname+6,1).toInt();
+    qDebug() << uname << gStat << role;
 }

@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_BISON_View_t {
-    QByteArrayData data[10];
-    char stringdata[189];
+    QByteArrayData data[11];
+    char stringdata[201];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -30,17 +30,18 @@ struct qt_meta_stringdata_BISON_View_t {
 static const qt_meta_stringdata_BISON_View_t qt_meta_stringdata_BISON_View = {
     {
 QT_MOC_LITERAL(0, 0, 10),
-QT_MOC_LITERAL(1, 11, 8),
-QT_MOC_LITERAL(2, 20, 0),
-QT_MOC_LITERAL(3, 21, 30),
-QT_MOC_LITERAL(4, 52, 34),
-QT_MOC_LITERAL(5, 87, 28),
-QT_MOC_LITERAL(6, 116, 13),
-QT_MOC_LITERAL(7, 130, 19),
-QT_MOC_LITERAL(8, 150, 31),
-QT_MOC_LITERAL(9, 182, 5)
+QT_MOC_LITERAL(1, 11, 11),
+QT_MOC_LITERAL(2, 23, 0),
+QT_MOC_LITERAL(3, 24, 8),
+QT_MOC_LITERAL(4, 33, 30),
+QT_MOC_LITERAL(5, 64, 34),
+QT_MOC_LITERAL(6, 99, 28),
+QT_MOC_LITERAL(7, 128, 13),
+QT_MOC_LITERAL(8, 142, 19),
+QT_MOC_LITERAL(9, 162, 31),
+QT_MOC_LITERAL(10, 194, 5)
     },
-    "BISON_View\0go_press\0\0"
+    "BISON_View\0user_update\0\0go_press\0"
     "on_actionWhat_s_this_triggered\0"
     "on_actionBISON_View_Help_triggered\0"
     "on_commandLinkButton_clicked\0broadcast_tcp\0"
@@ -55,21 +56,27 @@ static const uint qt_meta_data_BISON_View[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-       7,   14, // methods
+       8,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       0,       // signalCount
+       1,       // signalCount
+
+ // signals: name, argc, parameters, tag, flags
+       1,    1,   54,    2, 0x06,
 
  // slots: name, argc, parameters, tag, flags
-       1,    0,   49,    2, 0x08,
-       3,    0,   50,    2, 0x08,
-       4,    0,   51,    2, 0x08,
-       5,    0,   52,    2, 0x08,
-       6,    0,   53,    2, 0x08,
-       7,    0,   54,    2, 0x08,
-       8,    1,   55,    2, 0x08,
+       3,    0,   57,    2, 0x08,
+       4,    0,   58,    2, 0x08,
+       5,    0,   59,    2, 0x08,
+       6,    0,   60,    2, 0x08,
+       7,    0,   61,    2, 0x08,
+       8,    0,   62,    2, 0x08,
+       9,    1,   63,    2, 0x08,
+
+ // signals: parameters
+    QMetaType::Void, QMetaType::QString,    2,
 
  // slots: parameters
     QMetaType::Void,
@@ -78,7 +85,7 @@ static const uint qt_meta_data_BISON_View[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
-    QMetaType::Void, QMetaType::Int,    9,
+    QMetaType::Void, QMetaType::Int,   10,
 
        0        // eod
 };
@@ -88,14 +95,24 @@ void BISON_View::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
     if (_c == QMetaObject::InvokeMetaMethod) {
         BISON_View *_t = static_cast<BISON_View *>(_o);
         switch (_id) {
-        case 0: _t->go_press(); break;
-        case 1: _t->on_actionWhat_s_this_triggered(); break;
-        case 2: _t->on_actionBISON_View_Help_triggered(); break;
-        case 3: _t->on_commandLinkButton_clicked(); break;
-        case 4: _t->broadcast_tcp(); break;
-        case 5: _t->process_pending_tcp(); break;
-        case 6: _t->on_comboBox_currentIndexChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 0: _t->user_update((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 1: _t->go_press(); break;
+        case 2: _t->on_actionWhat_s_this_triggered(); break;
+        case 3: _t->on_actionBISON_View_Help_triggered(); break;
+        case 4: _t->on_commandLinkButton_clicked(); break;
+        case 5: _t->broadcast_tcp(); break;
+        case 6: _t->process_pending_tcp(); break;
+        case 7: _t->on_comboBox_currentIndexChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
         default: ;
+        }
+    } else if (_c == QMetaObject::IndexOfMethod) {
+        int *result = reinterpret_cast<int *>(_a[0]);
+        void **func = reinterpret_cast<void **>(_a[1]);
+        {
+            typedef void (BISON_View::*_t)(QString );
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&BISON_View::user_update)) {
+                *result = 0;
+            }
         }
     }
 }
@@ -125,14 +142,21 @@ int BISON_View::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 7)
+        if (_id < 8)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 7;
+        _id -= 8;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 7)
+        if (_id < 8)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 7;
+        _id -= 8;
     }
     return _id;
+}
+
+// SIGNAL 0
+void BISON_View::user_update(QString _t1)
+{
+    void *_a[] = { 0, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    QMetaObject::activate(this, &staticMetaObject, 0, _a);
 }
 QT_END_MOC_NAMESPACE

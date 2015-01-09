@@ -6,6 +6,8 @@ Thread::Thread(int ID, QObject *parent) :
     this->socketDescriptor = ID;
     logged_in = false;
     curr_user = -1;
+    connect(parent, SIGNAL(login_response(int, int)), this, SLOT(login_listen(int,int)));
+    connect(parent, SIGNAL(server_message(QString)), this, SLOT(server_message(QString)));
 }
 
 void Thread::run()
@@ -19,12 +21,13 @@ void Thread::run()
 
     connect(socket, SIGNAL(readyRead()), this, SLOT(readyRead()),Qt::DirectConnection);
     connect(socket, SIGNAL(disconnected()), this, SLOT(disconnected()), Qt::DirectConnection);
-
     qDebug() << "<" << this->socketDescriptor << "> Client connected.";
 
     socket->write("Welcome client\r\n\r\n");
     socket->flush();
     socket->waitForBytesWritten(3000);
+
+    this->moveToThread(this);
 
     exec();
 }
@@ -34,23 +37,30 @@ void Thread::login(QString credentials){
     int newline = credentials.indexOf("\n");
     QString uname = credentials.mid(3,(space - 3));
     QString pass = credentials.mid((space + 1),(newline - space));
-    curr_user = emit login_main(uname, pass);
-    if(curr_user > -1){
-        logged_in = true;
-        QString message = "%L 1";
-        QByteArray data;
-        data.append(message);
-        socket->write(data);
-        socket->flush();
-        socket->waitForBytesWritten(3000);
-        emit
-    }else{
-        QString message = "%L 0";
-        QByteArray data;
-        data.append(message);
-        socket->write(data);
-        socket->flush();
-        socket->waitForBytesWritten(3000);
+    emit login_main(uname, pass, socketDescriptor);
+}
+
+void Thread::login_listen(int sock, int index){
+    if(socketDescriptor == sock){
+        curr_user = index;
+        if(curr_user > -1){
+            qDebug() << "<" << this->socketDescriptor << "> logged in as user " << curr_user;
+            logged_in = true;
+            QString message = "%L 1";
+            QByteArray data;
+            data.clear();
+            data.append(message);
+            socket->write(data);
+            socket->flush();
+            socket->waitForBytesWritten(3000);
+        }else{
+            QString message = "%L 0";
+            QByteArray data;
+            data.append(message);
+            socket->write(data);
+            socket->flush();
+            socket->waitForBytesWritten(3000);
+        }
     }
 }
 
@@ -101,6 +111,15 @@ void Thread::readyRead()
     }
 
 
+}
+
+void Thread::server_message(QString message)
+{
+    QByteArray data;
+    data.append(message);
+    socket->write(data);
+    socket->flush();
+    socket->waitForBytesWritten(3000);
 }
 
 void Thread::disconnected()

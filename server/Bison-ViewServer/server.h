@@ -19,9 +19,10 @@ public:
     void startServer();
 
 signals:
-
+   void login_response(int sock_num, int index);
+   void server_message(QString message);
 public slots:
-   int login(QString uname, QString pass);
+   void login(QString uname, QString pass, int sock_num);
    void logout(int user_index);
    void go_change(int user_index, bool status);
 private:

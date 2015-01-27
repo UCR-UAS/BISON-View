@@ -48,6 +48,7 @@ BISON_View::BISON_View(QWidget *parent) :
     message_tab = new welcome_message(this);
     go_nogo_tab = new Go_NoGo(this);
     connect(this, SIGNAL(user_update(QString)), go_nogo_tab, SLOT(user_update(QString)));
+    connect(this, SIGNAL(user_logout(QString)), go_nogo_tab, SLOT(remove_old(QString)));
     mission_commander_tab = new mission_commander(this);
     mission_commander_tab->hide();
     telemetry_tab = new telemetry(this);
@@ -239,6 +240,16 @@ void BISON_View::on_comboBox_currentIndexChanged(int index)
 {
     role = index;
     update_role();
+    if(tcp_sock->state() == QTcpSocket::ConnectedState)
+    {
+        QString role_update = "%R ";
+        role_update.append(QString::number(role));
+        QByteArray message;
+        message.append(role_update);
+        tcp_sock->write(message);
+        tcp_sock->flush();
+        tcp_sock->waitForBytesWritten(3000);
+    }
 }
 
 void BISON_View::broadcast_tcp()
@@ -249,26 +260,39 @@ void BISON_View::broadcast_tcp()
 void BISON_View::process_pending_tcp()
 {
     QByteArray data = tcp_sock->readAll();
-    qDebug() << data;
-    if(data.mid(0,3) == "%L "){
-        if(data.mid(3,1) == "1"){
-            logged_in = true;
-        }else if(data.mid(3) == "0"){
-            logged_in = false;
-        }
-        update_login();
-    }else if(data.mid(0,3) == "%G "){
-        if(data.mid(3) == "1"){
-            go_status = true;
-            update_go();
-        }else if(data.mid(3) == "0"){
-            go_status = false;
-            update_go();
-        }
-    }else if(data.mid(0,3) == "%U "){
-        QString user_info;
-        user_info.append(data);
-        emit user_update(user_info);
+    QString server_message;
+    server_message.append(data);
+    int i = 0;
+    while(server_message.indexOf("%", i) > -1){
+        process_command(server_message.mid(server_message.indexOf("%", i)));
+        ++i;
     }
 }
 
+void BISON_View::process_command(QString command)
+{
+    qDebug() << command;
+    if(command.mid(0,3) == "%L "){
+        if(command.mid(3,1) == "1"){
+            logged_in = true;
+        }else if(command.mid(3) == "0"){
+            logged_in = false;
+        }
+        update_login();
+    }else if(command.mid(0,3) == "%G "){
+        if(command.mid(3) == "1"){
+            go_status = true;
+            update_go();
+        }else if(command.mid(3) == "0"){
+            go_status = false;
+            update_go();
+        }
+    }else if(command.mid(0,3) == "%U "){
+        QString user_info;
+        user_info.append(command);
+        emit user_update(user_info);
+    }else if(command.mid(0,4) == "%UL "){
+        QString uname = command.mid(4);
+        emit user_logout(uname);
+    }
+}

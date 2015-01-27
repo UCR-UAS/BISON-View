@@ -29,12 +29,13 @@ public:
 
 public slots:
     void user_update(QString);
-
+    void remove_old(QString);
 private:
     QGridLayout *grid;
     QListWidget *list[MAX_TEAMS];
     QLabel *label[MAX_TEAMS];
 
+    int check_role(QString, int);
 };
 
 #endif // GO_NOGO_H

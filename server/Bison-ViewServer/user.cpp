@@ -40,6 +40,10 @@ void User::set_role(int new_role)
     role = new_role;
 }
 
+bool User::is_logged_in(){
+    return(in_use);
+}
+
 QString User::get_username(){
     return(username);
 }

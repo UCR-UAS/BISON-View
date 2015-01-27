@@ -6,6 +6,10 @@ mission::mission(QWidget *parent) :
     ui(new Ui::mission)
 {
     ui->setupUi(this);
+    ui->EggX->setPlaceholderText("X-Coord");
+    ui->EggY->setPlaceholderText("Y-Coord");
+    ui->Uname->setPlaceholderText("Upload Username");
+    ui->Pass->setPlaceholderText("Upload Password");
 }
 
 mission::~mission()

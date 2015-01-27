@@ -33,5 +33,48 @@ void Go_NoGo::user_update(QString data){
     QString uname = data.mid(3,end_uname-3);
     int gStat = data.mid(end_uname+3,1).toInt();
     int role = data.mid(end_uname+6,1).toInt();
-    qDebug() << uname << gStat << role;
+    int current = check_role(uname, role);
+    if(current > -1){
+        if(gStat){
+            list[role]->item(current)->setBackground(Qt::green);
+        }else{
+            list[role]->item(current)->setBackground(Qt::red);
+        }
+    }else{
+        remove_old(uname);
+        QListWidgetItem* new_user = new QListWidgetItem(uname);
+        new_user->setForeground(Qt::black);
+        if(gStat){
+            new_user->setBackground(Qt::green);
+        }else{
+            new_user->setBackground(Qt::red);
+        }
+        list[role]->addItem(new_user);
+    }
 }
+
+void Go_NoGo::remove_old(QString uname)
+{
+    for(unsigned i=0;i<MAX_TEAMS;++i){
+        if(list[i]->count() != 0){
+            for(unsigned j=0;j<list[i]->count();++j){
+                if(list[i]->item(j)->text() == uname)
+                {
+                    list[i]->takeItem(j);
+                }
+            }
+        }
+    }
+}
+
+int Go_NoGo::check_role(QString uname, int role)
+{
+    for(unsigned i=0;i<list[role]->count();++i){
+        if(list[role]->item(i)->text() == uname)
+        {
+            return(i);
+        }
+    }
+    return(-1);
+}
+

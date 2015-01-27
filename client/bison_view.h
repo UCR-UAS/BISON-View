@@ -43,6 +43,7 @@ private:
     void update_login();
     void update_role();
     void update_go();
+    void process_command(QString);
 
 private slots:
     void go_press();
@@ -55,6 +56,7 @@ private slots:
 
 signals:
     void user_update(QString);
+    void user_logout(QString);
 };
 
 #endif // BISON_VIEW_H

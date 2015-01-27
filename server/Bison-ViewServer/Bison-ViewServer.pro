@@ -18,13 +18,13 @@ TEMPLATE = app
 
 SOURCES += main.cpp \
     server.cpp \
-    thread.cpp \
-    user.cpp
+    user.cpp \
+    connection.cpp
 
 HEADERS += \
     server.h \
-    thread.h \
-    user.h
+    user.h \
+    connection.h
 
 OTHER_FILES += \
     users.txt

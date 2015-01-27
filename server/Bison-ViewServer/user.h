@@ -21,6 +21,7 @@ public:
     QString get_username();
     QString get_go();
     QString get_role();
+    bool is_logged_in();
 };
 
 #endif // USER_H

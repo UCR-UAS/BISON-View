@@ -21,6 +21,7 @@
 #include "autopilot.h"
 #include "what_s_this.h"
 #include "help.h"
+#include "set_server.h"
 
 BISON_View::BISON_View(QWidget *parent) :
     QMainWindow(parent),
@@ -31,16 +32,7 @@ BISON_View::BISON_View(QWidget *parent) :
 
     // initialize sockets
     tcp_sock = new QTcpSocket(this);
-    QHostAddress server;
-    server.setAddress("127.0.0.1");
-    tcp_sock->connectToHost(server, 1234);
-    if(tcp_sock->isOpen()){
-        qDebug() << "Socket connected.";
-    }else{
-        qDebug() << "Socket could not connect.";
-    }
     connect(tcp_sock, SIGNAL(readyRead()), this, SLOT(process_pending_tcp()));
-
     //show menu bar
     ui->menuBar->show();
 
@@ -91,7 +83,7 @@ BISON_View::BISON_View(QWidget *parent) :
 
     // initialize signals
     connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(go_press()));
-
+    on_actionSet_Server_triggered();
 }
 
 BISON_View::~BISON_View()
@@ -112,9 +104,9 @@ void BISON_View::go_press()
    QString message;
    QByteArray data;
    if(go_status){
-     message = "%G 0";
+     message = "%D G 0";
    }else{
-     message = "%G 1";
+     message = "%D G 1";
    }
    data.append(message);
    tcp_sock->write(data);
@@ -143,6 +135,14 @@ void BISON_View::on_actionWhat_s_this_triggered()
 void BISON_View::on_actionBISON_View_Help_triggered()
 {
     help myDialog;
+    myDialog.setModal(true);
+    myDialog.exec();
+}
+
+void BISON_View::on_actionSet_Server_triggered()
+{
+    set_server myDialog;
+    connect(&myDialog, SIGNAL(ip_out(QString)), this, SLOT(connect_to_server(QString)));
     myDialog.setModal(true);
     myDialog.exec();
 }
@@ -242,7 +242,7 @@ void BISON_View::on_comboBox_currentIndexChanged(int index)
     update_role();
     if(tcp_sock->state() == QTcpSocket::ConnectedState)
     {
-        QString role_update = "%R ";
+        QString role_update = "%D R ";
         role_update.append(QString::number(role));
         QByteArray message;
         message.append(role_update);
@@ -275,24 +275,58 @@ void BISON_View::process_command(QString command)
     if(command.mid(0,3) == "%L "){
         if(command.mid(3,1) == "1"){
             logged_in = true;
-        }else if(command.mid(3) == "0"){
+        }else if(command.mid(3,1) == "0"){
             logged_in = false;
+            qDebug() << "Logged Out";
         }
         update_login();
-    }else if(command.mid(0,3) == "%G "){
-        if(command.mid(3) == "1"){
-            go_status = true;
-            update_go();
-        }else if(command.mid(3) == "0"){
-            go_status = false;
-            update_go();
+    }else if(command.mid(0,3) == "%LR"){
+
+    }else if(command.mid(0,3) == "%D "){
+        QChar id = command.at(3).toLatin1();
+        qint8 val = id.unicode();
+        switch(val){
+            case 85:
+                {
+                QString user_info;
+                user_info.append(command);
+                emit user_update(user_info);
+                break;
+                }
+            case 71:
+                {
+                    if(command.mid(5,1) == "1"){
+                        go_status = true;
+                    }else{
+                        go_status = false;
+                    }
+                    update_go();
+                    break;
+                }
+            case 82:
+                {
+
+                }
+            default:
+                qDebug() << "Error: Unknown Identifier\n";
+                break;
         }
-    }else if(command.mid(0,3) == "%U "){
-        QString user_info;
-        user_info.append(command);
-        emit user_update(user_info);
-    }else if(command.mid(0,4) == "%UL "){
-        QString uname = command.mid(4);
-        emit user_logout(uname);
+    }else{
+        qDebug() << "Error: Unkown Command\n";
+    }
+}
+
+void BISON_View::connect_to_server(QString ip)
+{
+    if(tcp_sock->isOpen()){
+        tcp_sock->close();
+    }
+    QHostAddress server;
+    server.setAddress(ip);
+    tcp_sock->connectToHost(server, port_num);
+    if(tcp_sock->isOpen()){
+        qDebug() << "Socket connected.";
+    }else{
+        qDebug() << "Socket could not connect.";
     }
 }

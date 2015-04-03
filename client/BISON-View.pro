@@ -22,7 +22,8 @@ SOURCES += main.cpp\
     telemetry.cpp \
     image_processing.cpp \
     mission.cpp \
-    autopilot.cpp
+    autopilot.cpp \
+    set_server.cpp
 
 HEADERS  += bison_view.h \
     go_nogo.h \
@@ -35,7 +36,8 @@ HEADERS  += bison_view.h \
     telemetry.h \
     image_processing.h \
     mission.h \
-    autopilot.h
+    autopilot.h \
+    set_server.h
 
 FORMS    += bison_view.ui \
     welcome_message.ui \
@@ -46,7 +48,8 @@ FORMS    += bison_view.ui \
     telemetry.ui \
     image_processing.ui \
     mission.ui \
-    autopilot.ui
+    autopilot.ui \
+    set_server.ui
 
 OTHER_FILES += \
     Notes.txt

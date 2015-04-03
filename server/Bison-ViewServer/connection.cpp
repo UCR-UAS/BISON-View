@@ -76,6 +76,7 @@ void connection::login_listen(int sock, int index){
 }
 
 void connection::logout(){
+    emit logout_main(curr_user);
     logged_in = false;
     curr_user = -1;
     QString  message = "%L 0";
@@ -84,32 +85,31 @@ void connection::logout(){
     socket->write(data);
     socket->flush();
     socket->waitForBytesWritten();
-    emit logout_main(curr_user-1);
 }
 
 void connection::readyRead()
 {
-    QByteArray data = socket->readAll();
-
-    qDebug() << "<" << this->socketDescriptor << "> Data in:" << data;
-
+    QByteArray raw_data = socket->readAll();
+    qDebug() << "<" << this->socketDescriptor << "> Data in:" << raw_data;
+    QString data;
+    data.append(raw_data);
     if(data.mid(0,3) == "%L "){
         QString credentials = data;
         login(data);
     }else if(data.mid(0,3) == "%LO"){
         logout();
-    }else if(data.mid(0,3) == "%E"){
+    }else if(data.mid(0,3) == "%LR"){
         disconnected();
-    }else if(data.mid(0,3) == "%G "){
+    /*}else if(data.mid(0,3) == "%G "){
         if(logged_in){
             QString message;
             if(data.mid(3) == "1"){
                 emit go_status_update(curr_user, true);
-                message = "%G 1";
+                message = "%D G 1";
                 qDebug() << message;
             }else if(data.mid(3) == "0"){
                 emit go_status_update(curr_user, false);
-                message = "%G 0";
+                message = "%D G 0";
                 qDebug() << message;
             }
             data.clear();
@@ -118,19 +118,62 @@ void connection::readyRead()
             socket->flush();
             socket->waitForBytesWritten(3000);
          }
-    }else if(data.mid(0,3) == "%R "){
+    */}else if(data.mid(0,3) == "%D "){
+       QChar id = data.at(3).toLatin1();
+       qint8 val = id.unicode();
+       switch(val){
+           case 71:
+               {
+                  if(logged_in){
+                      QString message;
+                      if(data.mid(5) == "1"){
+                         emit go_status_update(curr_user, true);
+                         message = "%D G 1";
+                         qDebug() << message;
+                      }else if(data.mid(5) == "0"){
+                         emit go_status_update(curr_user, false);
+                         message = "%D G 0";
+                         qDebug() << message;
+                      }
+                  raw_data.clear();
+                  raw_data.append(message);
+                  socket->write(raw_data);
+                  socket->flush();
+                  socket->waitForBytesWritten(3000);
+                }
+                break;
+               }
+            case 82:
+                {
+                    if(logged_in){
+                        QString message = "%D R ";
+                        int new_role = data.mid(5).toInt();
+                        emit role_update(curr_user, new_role);
+                        raw_data.clear();
+                        raw_data.append(message);
+                        socket->write(raw_data);
+                        socket->flush();
+                        socket->waitForBytesWritten(3000);
+                     }
+                     break;
+                }
+          default:
+                qDebug() << "Error: Unknown Identifier\n";
+                break;
+        }
+    }/*else if(data.mid(0,3) == "%R "){
         if(logged_in){
             QString message = "%R ";
             int new_role = data.mid(3).toInt();
             emit role_update(curr_user, new_role);
-            data.clear();
-            data.append(message);
-            socket->write(data);
+            raw_data.clear();
+            raw_data.append(message);
+            socket->write(raw_data);
             socket->flush();
             socket->waitForBytesWritten(3000);
          }
-    }else{
-        socket->write(data);
+    }*/else{
+        socket->write(raw_data);
         socket->flush();
         socket->waitForBytesWritten(3000);
     }

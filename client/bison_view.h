@@ -40,6 +40,7 @@ private:
     bool logged_in;
     int role;
     QTcpSocket *tcp_sock;
+    int port_num = 1234;
     void update_login();
     void update_role();
     void update_go();
@@ -53,7 +54,8 @@ private slots:
     void broadcast_tcp();
     void process_pending_tcp();
     void on_comboBox_currentIndexChanged(int index);
-
+    void on_actionSet_Server_triggered();
+    void connect_to_server(QString);
 signals:
     void user_update(QString);
     void user_logout(QString);

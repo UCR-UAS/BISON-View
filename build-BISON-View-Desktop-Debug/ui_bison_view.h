@@ -61,7 +61,7 @@ public:
     {
         if (BISON_View->objectName().isEmpty())
             BISON_View->setObjectName(QStringLiteral("BISON_View"));
-        BISON_View->resize(800, 400);
+        BISON_View->resize(800, 519);
         BISON_View->setStyleSheet(QStringLiteral("QTabWidget::tab:disabled { width: 0; height: 0; margin: 0; padding: 0; border: none; }"));
         actionSave_Telemetry = new QAction(BISON_View);
         actionSave_Telemetry->setObjectName(QStringLiteral("actionSave_Telemetry"));

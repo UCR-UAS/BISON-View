@@ -15,6 +15,13 @@ public:
     explicit image_processing(QWidget *parent = 0);
     ~image_processing();
 
+private slots:
+    void on_pushButton_clicked();
+
+    void on_Next_clicked();
+
+    void on_Tag_clicked();
+
 private:
     Ui::image_processing *ui;
 };

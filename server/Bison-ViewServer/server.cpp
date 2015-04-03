@@ -5,7 +5,7 @@ using namespace std;
 Server::Server(QObject *parent) :
     QTcpServer(parent)
 {
-    /*QFile text("/home/cody/Desktop/code/BISON-clone/BISON-View/server/Bison-ViewServer/users.txt");
+    QFile text("/etc/Bison/users.txt");
     text.open(QIODevice::ReadOnly);
     QTextStream textStream(&text);
 
@@ -22,22 +22,7 @@ Server::Server(QObject *parent) :
             User temp(uname, pass);
             user_list.push_back(temp);
         }
-    }*/
-    QString uname = "bho";
-    QString pass = "12345";
-    qDebug() << uname << pass;
-    User user1(uname, pass);
-    user_list.push_back(user1);
-    uname = "blu";
-    pass = "12345";
-    qDebug() << uname << pass;
-    User user2(uname, pass);
-    user_list.push_back(user2);
-    uname = "csimons";
-    pass = "12345";
-    qDebug() << uname << pass;
-    User user3(uname, pass);
-    user_list.push_back(user3);
+    }
 }
 
 void Server::startServer()
@@ -54,7 +39,7 @@ void Server::login(QString uname, QString pass, int sock_num){
     for(unsigned i=0;i<user_list.size();++i){
         if(user_list.at(i).login(uname, pass)){
             emit login_response(sock_num, i);
-            QString message = "%U ";
+            QString message = "%D U ";
             message.append(user_list.at(i).get_username());
             message.append(" /G");
             message.append(user_list.at(i).get_go());
@@ -69,14 +54,14 @@ void Server::login(QString uname, QString pass, int sock_num){
 
 void Server::logout(int user_index){
     user_list.at(user_index).logout();
-    QString message = "%UL ";
+    QString message = "%D UL ";
     message.append(user_list.at(user_index).get_username());
     emit server_message(message, -1);
 }
 
 void Server::go_change(int user_index, bool status){
     user_list.at(user_index).set_go_status(status);
-    QString message = "%U ";
+    QString message = "%D U ";
     message.append(user_list.at(user_index).get_username());
     message.append(" /G");
     message.append(user_list.at(user_index).get_go());
@@ -88,7 +73,7 @@ void Server::go_change(int user_index, bool status){
 void Server::role_change(int user_index, int new_role)
 {
     user_list.at(user_index).set_role(new_role);
-    QString message = "%U ";
+    QString message = "%D U ";
     message.append(user_list.at(user_index).get_username());
     message.append(" /G");
     message.append(user_list.at(user_index).get_go());
@@ -103,7 +88,7 @@ void Server::info_request(int sock_num)
     QString message;
     for(unsigned i=0;i<user_list.size();++i){
         if(user_list.at(i).is_logged_in()){
-            message.append("%U ");
+            message.append("%D U ");
             message.append(user_list.at(i).get_username());
             message.append(" /G");
             message.append(user_list.at(i).get_go());

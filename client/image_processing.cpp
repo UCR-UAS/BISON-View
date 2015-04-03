@@ -12,3 +12,19 @@ image_processing::~image_processing()
 {
     delete ui;
 }
+
+void image_processing::on_pushButton_clicked()
+{
+
+}
+
+void image_processing::on_Next_clicked()
+{
+
+}
+
+void image_processing::on_Tag_clicked()
+{
+    QString newGeoTag = ui->textBrowser->toPlainText();
+    qDebug(newGeoTag.toLatin1());
+}

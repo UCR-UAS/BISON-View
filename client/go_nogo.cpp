@@ -29,27 +29,33 @@ Go_NoGo::~Go_NoGo()
 }
 
 void Go_NoGo::user_update(QString data){
-    int end_uname = data.indexOf(" /");
-    QString uname = data.mid(3,end_uname-3);
-    int gStat = data.mid(end_uname+3,1).toInt();
-    int role = data.mid(end_uname+6,1).toInt();
-    int current = check_role(uname, role);
-    if(current > -1){
-        if(gStat){
-            list[role]->item(current)->setBackground(Qt::green);
-        }else{
-            list[role]->item(current)->setBackground(Qt::red);
-        }
-    }else{
+    if(data.mid(3,2) == "UL"){
+        int end_uname = data.indexOf(" /");
+        QString uname = data.mid(6,end_uname-5);
         remove_old(uname);
-        QListWidgetItem* new_user = new QListWidgetItem(uname);
-        new_user->setForeground(Qt::black);
-        if(gStat){
-            new_user->setBackground(Qt::green);
-        }else{
-            new_user->setBackground(Qt::red);
-        }
+    }else{
+        int end_uname = data.indexOf(" /");
+        QString uname = data.mid(5,end_uname-5);
+        int gStat = data.mid(end_uname+3,1).toInt();
+      int role = data.mid(end_uname+6,1).toInt();
+      int current = check_role(uname, role);
+       if(current > -1){
+           if(gStat){
+             list[role]->item(current)->setBackground(Qt::green);
+          }else{
+               list[role]->item(current)->setBackground(Qt::red);
+            }
+      }else{
+          remove_old(uname);
+          QListWidgetItem* new_user = new QListWidgetItem(uname);
+           new_user->setForeground(Qt::black);
+          if(gStat){
+              new_user->setBackground(Qt::green);
+          }else{
+             new_user->setBackground(Qt::red);
+         }
         list[role]->addItem(new_user);
+        }
     }
 }
 

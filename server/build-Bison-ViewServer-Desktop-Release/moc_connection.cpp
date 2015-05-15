@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_connection_t {
-    QByteArrayData data[27];
-    char stringdata[283];
+    QByteArrayData data[28];
+    char stringdata[298];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -55,7 +55,8 @@ QT_MOC_LITERAL(22, 230, 5),
 QT_MOC_LITERAL(23, 236, 14),
 QT_MOC_LITERAL(24, 251, 7),
 QT_MOC_LITERAL(25, 259, 9),
-QT_MOC_LITERAL(26, 269, 12)
+QT_MOC_LITERAL(26, 269, 12),
+QT_MOC_LITERAL(27, 282, 14)
     },
     "connection\0login_main\0\0uname\0pass\0"
     "sock_num\0logout_main\0user_index\0"
@@ -65,6 +66,7 @@ QT_MOC_LITERAL(26, 269, 12)
     "connection*\0client\0info_request\0welcome\0"
     "sock\0login_listen\0index\0server_message\0"
     "message\0readyRead\0disconnected\0"
+    "login_timedout\0"
 };
 #undef QT_MOC_LITERAL
 
@@ -74,7 +76,7 @@ static const uint qt_meta_data_connection[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-      12,   14, // methods
+      13,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -82,20 +84,21 @@ static const uint qt_meta_data_connection[] = {
        7,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    3,   74,    2, 0x06,
-       6,    1,   81,    2, 0x06,
-       8,    2,   84,    2, 0x06,
-      10,    2,   89,    2, 0x06,
-      12,    1,   94,    2, 0x06,
-      15,    1,   97,    2, 0x06,
-      18,    1,  100,    2, 0x06,
+       1,    3,   79,    2, 0x06,
+       6,    1,   86,    2, 0x06,
+       8,    2,   89,    2, 0x06,
+      10,    2,   94,    2, 0x06,
+      12,    1,   99,    2, 0x06,
+      15,    1,  102,    2, 0x06,
+      18,    1,  105,    2, 0x06,
 
  // slots: name, argc, parameters, tag, flags
-      19,    1,  103,    2, 0x0a,
-      21,    2,  106,    2, 0x0a,
-      23,    2,  111,    2, 0x0a,
-      25,    0,  116,    2, 0x0a,
-      26,    0,  117,    2, 0x0a,
+      19,    1,  108,    2, 0x0a,
+      21,    2,  111,    2, 0x0a,
+      23,    2,  116,    2, 0x0a,
+      25,    0,  121,    2, 0x0a,
+      26,    0,  122,    2, 0x0a,
+      27,    0,  123,    2, 0x0a,
 
  // signals: parameters
     QMetaType::Void, QMetaType::QString, QMetaType::QString, QMetaType::Int,    3,    4,    5,
@@ -110,6 +113,7 @@ static const uint qt_meta_data_connection[] = {
     QMetaType::Void, QMetaType::Int,   20,
     QMetaType::Void, QMetaType::Int, QMetaType::Int,   20,   22,
     QMetaType::Void, QMetaType::QString, QMetaType::Int,   24,    5,
+    QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
 
@@ -133,6 +137,7 @@ void connection::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 9: _t->server_message((*reinterpret_cast< QString(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
         case 10: _t->readyRead(); break;
         case 11: _t->disconnected(); break;
+        case 12: _t->login_timedout(); break;
         default: ;
         }
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
@@ -219,13 +224,13 @@ int connection::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 12)
+        if (_id < 13)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 12;
+        _id -= 13;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 12)
+        if (_id < 13)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 12;
+        _id -= 13;
     }
     return _id;
 }

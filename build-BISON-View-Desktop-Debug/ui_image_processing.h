@@ -13,10 +13,11 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QFrame>
+#include <QtWidgets/QGraphicsView>
 #include <QtWidgets/QHeaderView>
-#include <QtWidgets/QLabel>
 #include <QtWidgets/QPushButton>
-#include <QtWidgets/QTextBrowser>
+#include <QtWidgets/QTextEdit>
 #include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -24,32 +25,51 @@ QT_BEGIN_NAMESPACE
 class Ui_image_processing
 {
 public:
-    QPushButton *Tag;
-    QLabel *label;
-    QPushButton *Next;
-    QTextBrowser *textBrowser;
-    QPushButton *pushButton;
+    QPushButton *prev;
+    QPushButton *next;
+    QPushButton *first;
+    QPushButton *confirm;
+    QPushButton *trash;
+    QPushButton *last;
+    QFrame *frame;
+    QGraphicsView *graphicsView;
+    QTextEdit *textEdit;
 
     void setupUi(QWidget *image_processing)
     {
         if (image_processing->objectName().isEmpty())
             image_processing->setObjectName(QStringLiteral("image_processing"));
-        image_processing->resize(400, 300);
-        Tag = new QPushButton(image_processing);
-        Tag->setObjectName(QStringLiteral("Tag"));
-        Tag->setGeometry(QRect(240, 160, 98, 31));
-        label = new QLabel(image_processing);
-        label->setObjectName(QStringLiteral("label"));
-        label->setGeometry(QRect(20, 20, 181, 221));
-        Next = new QPushButton(image_processing);
-        Next->setObjectName(QStringLiteral("Next"));
-        Next->setGeometry(QRect(240, 200, 98, 31));
-        textBrowser = new QTextBrowser(image_processing);
-        textBrowser->setObjectName(QStringLiteral("textBrowser"));
-        textBrowser->setGeometry(QRect(220, 40, 161, 101));
-        pushButton = new QPushButton(image_processing);
-        pushButton->setObjectName(QStringLiteral("pushButton"));
-        pushButton->setGeometry(QRect(240, 240, 98, 31));
+        image_processing->resize(576, 347);
+        prev = new QPushButton(image_processing);
+        prev->setObjectName(QStringLiteral("prev"));
+        prev->setGeometry(QRect(370, 140, 51, 31));
+        next = new QPushButton(image_processing);
+        next->setObjectName(QStringLiteral("next"));
+        next->setGeometry(QRect(430, 140, 51, 31));
+        first = new QPushButton(image_processing);
+        first->setObjectName(QStringLiteral("first"));
+        first->setGeometry(QRect(490, 140, 51, 31));
+        confirm = new QPushButton(image_processing);
+        confirm->setObjectName(QStringLiteral("confirm"));
+        confirm->setGeometry(QRect(330, 180, 98, 31));
+        trash = new QPushButton(image_processing);
+        trash->setObjectName(QStringLiteral("trash"));
+        trash->setGeometry(QRect(430, 180, 98, 31));
+        last = new QPushButton(image_processing);
+        last->setObjectName(QStringLiteral("last"));
+        last->setGeometry(QRect(310, 140, 51, 31));
+        frame = new QFrame(image_processing);
+        frame->setObjectName(QStringLiteral("frame"));
+        frame->setGeometry(QRect(30, 20, 251, 251));
+        frame->setFrameShape(QFrame::Panel);
+        frame->setFrameShadow(QFrame::Sunken);
+        frame->setLineWidth(5);
+        graphicsView = new QGraphicsView(frame);
+        graphicsView->setObjectName(QStringLiteral("graphicsView"));
+        graphicsView->setGeometry(QRect(5, 5, 240, 240));
+        textEdit = new QTextEdit(image_processing);
+        textEdit->setObjectName(QStringLiteral("textEdit"));
+        textEdit->setGeometry(QRect(310, 20, 231, 111));
 
         retranslateUi(image_processing);
 
@@ -59,10 +79,12 @@ public:
     void retranslateUi(QWidget *image_processing)
     {
         image_processing->setWindowTitle(QApplication::translate("image_processing", "Form", 0));
-        Tag->setText(QApplication::translate("image_processing", "Update", 0));
-        label->setText(QApplication::translate("image_processing", "TextLabel", 0));
-        Next->setText(QApplication::translate("image_processing", "Save", 0));
-        pushButton->setText(QApplication::translate("image_processing", "Trash", 0));
+        prev->setText(QApplication::translate("image_processing", "<", 0));
+        next->setText(QApplication::translate("image_processing", ">", 0));
+        first->setText(QApplication::translate("image_processing", ">>", 0));
+        confirm->setText(QApplication::translate("image_processing", "Confirm", 0));
+        trash->setText(QApplication::translate("image_processing", "Trash", 0));
+        last->setText(QApplication::translate("image_processing", "<<", 0));
     } // retranslateUi
 
 };

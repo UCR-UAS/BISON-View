@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QTcpSocket>
+#include <QTimer>
 
 class connection : public QObject
 {
@@ -26,12 +27,17 @@ public slots:
     void server_message(QString message, int sock_num);
     void readyRead();
     void disconnected();
+    void login_timedout();
 private:
     QTcpSocket *socket;
     int socketDescriptor;
     bool logged_in;
     int curr_user;
+    QTimer *time_out;
     void logout();
+    void login_refresh();
+    int image_index;
+    QString pics[5];
 };
 
 #endif // CONNECTION_H

@@ -53,6 +53,7 @@ void Server::login(QString uname, QString pass, int sock_num){
 }
 
 void Server::logout(int user_index){
+    user_list.at(user_index).set_role(0);
     user_list.at(user_index).logout();
     QString message = "%D UL ";
     message.append(user_list.at(user_index).get_username());
@@ -80,6 +81,15 @@ void Server::role_change(int user_index, int new_role)
     message.append("/R");
     message.append(user_list.at(user_index).get_role());
     emit server_message(message, -1);
+    message.clear();
+    switch(new_role){
+        case 4:
+            {
+               message.append("%D I /home/cody/Desktop/TestImages/001.jpg");
+               emit server_message(message, user_index);
+               break;
+            }
+    }
 }
 
 void Server::info_request(int sock_num)

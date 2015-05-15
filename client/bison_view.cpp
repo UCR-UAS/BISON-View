@@ -33,6 +33,7 @@ BISON_View::BISON_View(QWidget *parent) :
     // initialize sockets
     tcp_sock = new QTcpSocket(this);
     connect(tcp_sock, SIGNAL(readyRead()), this, SLOT(process_pending_tcp()));
+    connect(tcp_sock, SIGNAL(disconnected()), this, SLOT(server_disconnect()));
     //show menu bar
     ui->menuBar->show();
 
@@ -47,6 +48,8 @@ BISON_View::BISON_View(QWidget *parent) :
     telemetry_tab->hide();
     image_processing_tab = new image_processing(this);
     image_processing_tab->hide();
+    connect(this, SIGNAL(new_image(QString)), image_processing_tab, SLOT(new_image(QString)));
+    connect(image_processing_tab, SIGNAL(button_pushed(int)), this, SLOT(image_processing_button_push(int)));
     mission_tab = new mission(this);
     mission_tab->hide();
     autopilot_tab = new autopilot(this);
@@ -74,6 +77,8 @@ BISON_View::BISON_View(QWidget *parent) :
     ui->comboBox->setStyleSheet("color: grey");
     role = 0;
 
+    serverRefresh = new QTimer(this);
+    serverRefresh->stop();
     // initialize text fields
     ui->lineEdit->setPlaceholderText("Username");
     ui->lineEdit->setEnabled(true);
@@ -83,6 +88,7 @@ BISON_View::BISON_View(QWidget *parent) :
 
     // initialize signals
     connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(go_press()));
+    connect(serverRefresh, SIGNAL(timeout()), this, SLOT(timeToRefresh()));
     on_actionSet_Server_triggered();
 }
 
@@ -101,6 +107,7 @@ BISON_View::~BISON_View()
 
 void BISON_View::go_press()
 {
+    mission_tab->hide();
    QString message;
    QByteArray data;
    if(go_status){
@@ -166,8 +173,11 @@ void BISON_View::update_login()
         ui->pushButton->setStyleSheet("color: grey");
         ui->pushButton->setText("No &Go!");
         go_status = false;
+        role=0;
+        ui->comboBox->setCurrentIndex(0);
         ui->comboBox->setEnabled(false);
         ui->comboBox->setStyleSheet("color: grey");
+        update_role();
     }
 }
 
@@ -303,9 +313,12 @@ void BISON_View::process_command(QString command)
                     update_go();
                     break;
                 }
-            case 82:
+            case 73:
                 {
-
+                    qDebug() << "73";
+                    QString path;
+                    path.append(command.mid(5,-1));
+                    emit new_image(path);
                 }
             default:
                 qDebug() << "Error: Unknown Identifier\n";
@@ -326,7 +339,38 @@ void BISON_View::connect_to_server(QString ip)
     tcp_sock->connectToHost(server, port_num);
     if(tcp_sock->isOpen()){
         qDebug() << "Socket connected.";
+        serverRefresh->start(1000);
     }else{
         qDebug() << "Socket could not connect.";
     }
+}
+
+void BISON_View::timeToRefresh()
+{
+    QString message = "%LR";
+    QByteArray data;
+    data.append(message);
+    tcp_sock->write(data);
+    tcp_sock->flush();
+    tcp_sock->waitForBytesWritten(3000);
+    serverRefresh->start(1000);
+}
+
+void BISON_View::server_disconnect()
+{
+    go_status=false;
+    update_go();
+    logged_in=false;
+    update_login();
+}
+
+void BISON_View::image_processing_button_push(int num)
+{
+    QString message = "%D I ";
+    message.append(QString::number(num));
+    QByteArray data;
+    data.append(message);
+    tcp_sock->write(data);
+    tcp_sock->flush();
+    tcp_sock->waitForBytesWritten(3000);
 }

@@ -6,73 +6,128 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>576</width>
+    <height>347</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QPushButton" name="Tag">
+  <widget class="QPushButton" name="prev">
    <property name="geometry">
     <rect>
-     <x>240</x>
-     <y>160</y>
+     <x>370</x>
+     <y>140</y>
+     <width>51</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>&lt;</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="next">
+   <property name="geometry">
+    <rect>
+     <x>430</x>
+     <y>140</y>
+     <width>51</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>&gt;</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="first">
+   <property name="geometry">
+    <rect>
+     <x>490</x>
+     <y>140</y>
+     <width>51</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>&gt;&gt;</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="confirm">
+   <property name="geometry">
+    <rect>
+     <x>330</x>
+     <y>180</y>
      <width>98</width>
      <height>31</height>
     </rect>
    </property>
    <property name="text">
-    <string>Update</string>
+    <string>Confirm</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label">
+  <widget class="QPushButton" name="trash">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>20</y>
-     <width>181</width>
-     <height>221</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>TextLabel</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="Next">
-   <property name="geometry">
-    <rect>
-     <x>240</x>
-     <y>200</y>
-     <width>98</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Save</string>
-   </property>
-  </widget>
-  <widget class="QTextBrowser" name="textBrowser">
-   <property name="geometry">
-    <rect>
-     <x>220</x>
-     <y>40</y>
-     <width>161</width>
-     <height>101</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="pushButton">
-   <property name="geometry">
-    <rect>
-     <x>240</x>
-     <y>240</y>
+     <x>430</x>
+     <y>180</y>
      <width>98</width>
      <height>31</height>
     </rect>
    </property>
    <property name="text">
     <string>Trash</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="last">
+   <property name="geometry">
+    <rect>
+     <x>310</x>
+     <y>140</y>
+     <width>51</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>&lt;&lt;</string>
+   </property>
+  </widget>
+  <widget class="QFrame" name="frame">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>20</y>
+     <width>251</width>
+     <height>251</height>
+    </rect>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::Panel</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Sunken</enum>
+   </property>
+   <property name="lineWidth">
+    <number>5</number>
+   </property>
+   <widget class="QGraphicsView" name="graphicsView">
+    <property name="geometry">
+     <rect>
+      <x>5</x>
+      <y>5</y>
+      <width>240</width>
+      <height>240</height>
+     </rect>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QTextEdit" name="textEdit">
+   <property name="geometry">
+    <rect>
+     <x>310</x>
+     <y>20</y>
+     <width>231</width>
+     <height>111</height>
+    </rect>
    </property>
   </widget>
  </widget>

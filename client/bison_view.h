@@ -12,6 +12,7 @@
 #include <QMainWindow>
 #include <QTcpSocket>
 #include <QUdpSocket>
+#include <QTimer>
 #include <QDebug>
 
 namespace Ui {
@@ -36,11 +37,13 @@ private:
     QWidget *image_processing_tab;
     QWidget *mission_tab;
     QWidget *autopilot_tab;
+    QTimer *serverRefresh;
     bool go_status;
     bool logged_in;
     int role;
     QTcpSocket *tcp_sock;
     int port_num = 1234;
+    int debug_var = 0;
     void update_login();
     void update_role();
     void update_go();
@@ -56,9 +59,13 @@ private slots:
     void on_comboBox_currentIndexChanged(int index);
     void on_actionSet_Server_triggered();
     void connect_to_server(QString);
+    void timeToRefresh();
+    void server_disconnect();
+    void image_processing_button_push(int);
 signals:
     void user_update(QString);
     void user_logout(QString);
+    void new_image(QString);
 };
 
 #endif // BISON_VIEW_H

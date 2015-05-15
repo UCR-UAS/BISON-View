@@ -2,6 +2,8 @@
 #define IMAGE_PROCESSING_H
 
 #include <QWidget>
+#include <QGraphicsScene>
+#include <QDebug>
 
 namespace Ui {
 class image_processing;
@@ -16,14 +18,20 @@ public:
     ~image_processing();
 
 private slots:
-    void on_pushButton_clicked();
-
-    void on_Next_clicked();
-
-    void on_Tag_clicked();
+    void new_image(QString);
+    void on_last_clicked();
+    void on_prev_clicked();
+    void on_next_clicked();
+    void on_first_clicked();
+    void on_confirm_clicked();
+    void on_trash_clicked();
 
 private:
     Ui::image_processing *ui;
+    QGraphicsScene *image;
+
+signals:
+    void button_pushed(int);
 };
 
 #endif // IMAGE_PROCESSING_H
